@@ -1,0 +1,22 @@
+.main-panel-container {
+  padding: 40px;
+  position: relative;
+
+  overflow-y: scroll;
+}
+
+#swap-modes {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  font-size: 20px;
+
+  border-bottom: 1px solid #eee;
+  padding-bottom: 3px;
+  transition: all 0.13s;
+}
+
+#swap-modes:hover {
+  cursor: pointer;
+  color: #ccc;
+}

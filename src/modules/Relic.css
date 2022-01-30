@@ -1,0 +1,31 @@
+.relic-container {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  margin: 10px;
+}
+
+.relic-container:hover {
+  cursor: pointer;
+}
+
+.checkbox {
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #eee;
+  transition: 0.16s all;
+}
+
+.checkbox.activated {
+  background-color: #eee;
+}
+
+.relic-name {
+  font-size: 24px;
+  font-weight: 100;
+  user-select: none;
+}

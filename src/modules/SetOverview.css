@@ -1,0 +1,100 @@
+.set-overview-container {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+#sets {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+#set-overview-title {
+  font-size: 72px;
+  font-weight: 900;
+
+  text-shadow: 7px 7px #262;
+}
+
+.set-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.set-activators-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.set-activator-thresholds {
+  display: flex;
+  flex-direction: row;
+  width: 100%; 
+  gap: 8px;
+}
+
+.set-threshold {
+  padding: 5px 10px;
+  border: 1px solid #eee;
+}
+
+.set-threshold.active {
+  background-color: #151;
+}
+
+.left-panel {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 8px;
+}
+
+.set-activator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(25% - 2px);
+  height: 45px;
+  border: 1px solid #eee;
+  font-weight: 100;
+}
+
+.set-activator.active {
+  background-color: #151;
+  font-weight: 400;
+}
+
+#relics-in-sets > div {
+  display: flex;
+  flex-direction: row;
+}
+
+#relics-in-sets {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  margin: 50px 0 20px 0;
+}
+
+#calculate {
+  padding: 10px 100px;
+  border: 1px solid #eee;
+  background-color: #112;
+  border-radius: 3px;
+  margin-top: 20px;
+  margin-bottom: -10px;
+  transition: 0.16s all;
+}
+
+#calculate:hover {
+  cursor: pointer;
+  background-color: #114;
+}

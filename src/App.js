@@ -1,24 +1,32 @@
-import logo from './logo.svg';
+import React, { useReducer } from 'react';
+import RelicSidebar from './modules/RelicSidebar';
+import MainPanel from './modules/MainPanel';
 import './App.css';
 
+export const RelicDataContext = React.createContext({})
+
+const reducer = (state, relicName) => {
+  const out = {
+    ...state,
+    [relicName]: !state[relicName]
+  }
+  localStorage.setItem('relicStorage', JSON.stringify(out))
+  return out
+}
+
 function App() {
+  const [state, dispatch] = useReducer(reducer, JSON.parse(localStorage.relicStorage || '{}'))
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RelicDataContext.Provider value={{
+      state,
+      dispatch,
+    }}>
+      <div className="main-container">
+        <RelicSidebar />
+        <MainPanel />
+      </div>
+    </RelicDataContext.Provider>
   );
 }
 

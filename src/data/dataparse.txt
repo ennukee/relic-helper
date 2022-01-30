@@ -1,0 +1,58 @@
+The following commands are run in the browser console of the following wiki page:
+https://oldschool.runescape.wiki/w/Shattered_Relics_League/Fragments
+
+If this is not allowed (no abrasive web-scraping is done here to reduce the wiki's performance), please let me know via discord enragednuke#0001 or on twitter @PriestismJP
+
+/*
+  RELIC FRAGMENT DATA GENERATION SCRIPT
+*/
+rows = [...document.getElementsByClassName('wikitable')[0].querySelectorAll('tr')]
+rowText = rows.map( row => [...row.children].map(col => col.innerText)).slice(1, -1)
+links = rows.map(row => row.children[1]?.firstChild.href).slice(1, -1)
+
+convertRowTextNode = (row, index) => ({
+  name: row[1],
+  link: links[index],
+  type: row[2]?.split('(')[0],
+  tier: row[2]?.match(/.*\(T([0-9])\)/)?.[1] || 0,
+  description: row[3].replace(/[0-9,x]+\/[0-9,x]+\/[0-9,x]+/g, '${X}'),
+  levelData: row[3].match(/[0-9,x]+\/[0-9,x]+\/[0-9,x]+/g)?.[0]?.split?.('/') || [],
+  setEffects: [
+    row[4],
+    row[5]
+  ],
+})
+
+objectRowNodes = rowText.map(convertRowTextNode)
+console.log(JSON.stringify(objectRowNodes, null, '\t'))
+
+
+/*
+  SET EFFECT DATA GENERATION SCRIPT
+
+  (note due to the way the table is laid out on wiki,
+  I do manual adjustments of the data for the values at each "level" of set)
+*/
+
+rows = [...document.getElementsByClassName('wikitable')[1].querySelectorAll('tr')]
+rowText = rows.map( row => [...row.children].map(col => col.innerText)).slice(1)
+links = rows.map(row => row.children[1]?.firstChild.href).slice(1)
+
+convertRowTextNode = (row, index) => ({
+  name: row[1].split(' (')[0],
+  link: links[index],
+  description: row[2],
+  activationThresholds: [],
+  levelData: [],
+  fragments: row[4]?.split('\n'),
+})
+
+seenSets = []
+objectRowNodes = rowText.map((row, index) => {
+  const setName = row[1].split(' (')[0]
+  if (seenSets.includes(setName)) { return }
+  seenSets.push(setName)
+  return convertRowTextNode(row, index)
+})
+console.log(JSON.stringify(objectRowNodes.filter(r => r), null, '\t'))
+
