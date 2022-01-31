@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/relic-helper/static/css/main.b1e69a25.css",
-    "main.js": "/relic-helper/static/js/main.f78bd6f1.js",
+    "main.js": "/relic-helper/static/js/main.6402bf13.js",
     "static/js/787.5ba7cff3.chunk.js": "/relic-helper/static/js/787.5ba7cff3.chunk.js",
     "index.html": "/relic-helper/index.html",
     "main.b1e69a25.css.map": "/relic-helper/static/css/main.b1e69a25.css.map",
-    "main.f78bd6f1.js.map": "/relic-helper/static/js/main.f78bd6f1.js.map",
+    "main.6402bf13.js.map": "/relic-helper/static/js/main.6402bf13.js.map",
     "787.5ba7cff3.chunk.js.map": "/relic-helper/static/js/787.5ba7cff3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b1e69a25.css",
-    "static/js/main.f78bd6f1.js"
+    "static/js/main.6402bf13.js"
   ]
 }
