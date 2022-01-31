@@ -56,7 +56,7 @@ export default function OverlapHelper() {
     'Unchained Talent': 3,
   })
   const [calcHash, setCalcHash] = useState(0)
-  const [comboData, setComboData] = useState([])
+  // const [comboData, setComboData] = useState([])
   const [overlapData, setOverlapData] = useState([])
   const prevCalcHash = useRef({ calcHash })
 
@@ -65,6 +65,26 @@ export default function OverlapHelper() {
       return
     }
     prevCalcHash.current = { calcHash }
+
+    const comboData = []
+    const activeSetNames = Object.entries(activeSets).filter(entry => entry[1]).map(entry => entry[0])
+    if (activeSetNames.length < 6) {
+      activeSetNames.forEach(set => {
+        const thresholdSelected = thresholdSelections[set]
+        const activeSetData = Sets.find(dset => dset.name === set)
+        const fragments = (activeSetData?.fragments || []).filter(relic => state[relic] && relicPrefs[relic] !== 2)
+        const nChooseKFrags = choose(fragments, thresholdSelected)
+        comboData.push(nChooseKFrags)
+      })
+      const setComboCount = getComboCount(comboData)
+      if (setComboCount > 500) {
+        setOverlapData(null)
+        return
+      }
+    } else {
+      setOverlapData(null)
+    }
+
     const allCombos = generateCombos(comboData)
     const mustHaveRelics = Object.entries(relicPrefs).filter(relic => relic[1] === 1).map(relic => relic[0])
     const parsedCombos = allCombos
@@ -72,33 +92,9 @@ export default function OverlapHelper() {
         .flatMap(i => i)
         .filter((val, i, s) => s.indexOf(val) === i))
       .sort((a, b) => a.length - b.length)
-      .filter(combo => mustHaveRelics.length > 0 ? mustHaveRelics.find(relic => combo.includes(relic)) : true)
+      .filter(combo => mustHaveRelics.every(relic => combo.includes(relic)))
     setOverlapData(parsedCombos)
-  }, [calcHash, comboData, relicPrefs])
-
-  useEffect(() => {
-    const dataSet = []
-    const activeSetNames = Object.entries(activeSets).filter(entry => entry[1]).map(entry => entry[0])
-    if (activeSetNames.length < 5) {
-      activeSetNames.forEach(set => {
-        const thresholdSelected = thresholdSelections[set]
-        const activeSetData = Sets.find(dset => dset.name === set)
-        const fragments = (activeSetData?.fragments || []).filter(relic => state[relic] && relicPrefs[relic] !== 2)
-        console.log('frags', fragments)
-        console.log('relicprefs', relicPrefs)
-        const nChooseKFrags = choose(fragments, thresholdSelected)
-        dataSet.push(nChooseKFrags)
-      })
-      const setComboCount = getComboCount(dataSet)
-      if (setComboCount > 500) {
-        setOverlapData([])
-        return
-      }
-      setComboData(dataSet)
-    } else {
-      setOverlapData([])
-    }
-  }, [activeSets, thresholdSelections, state, relicPrefs])
+  }, [activeSets, calcHash, relicPrefs, state, thresholdSelections])
 
   return <div className="overlaps-container">
     <div id="overlaps-title">
@@ -118,7 +114,7 @@ export default function OverlapHelper() {
         </div>
       ))}
     </div>
-    <div id="calculate" onClick={() => setCalcHash(calcHash + 1)}>Calculate{generateCombos(comboData) > 250 ? ' (high combos)' : ''}</div>
+    <div id="calculate" onClick={() => setCalcHash(calcHash + 1)}>Calculate</div>
     <div id="prefer-ignore-helper">
       Click on the relic fragment names below to cycle between <span>"prefer"</span> (only show overlaps with this relic), <span>"ignore"</span> (only show overlaps without this relic), and <span>"no preference"</span>
     </div>
@@ -161,10 +157,12 @@ export default function OverlapHelper() {
     <div id="overlap-section">
       <div id="overlap-title">UP TO 25 COMBOS <span>(of lowest relic count)</span></div>
       <div id="actual-overlaps">{
-        overlapData.filter(overlap => overlap.length <= 7 && overlap.length === overlapData[0].length).slice(0,100).map(overlap => (
+        overlapData === null
+        ? (<div>Selected items are too complex. Try narrowing it down by ignoring some relics, or choosing less sets.</div>)
+        : overlapData.filter(overlap => overlap.length <= 7 && overlap.length === overlapData[0].length).slice(0,100).map(overlap => (
             <div className="set-relics">
               {overlap.map(frag => (
-                <div key={frag} className="active">{frag}</div>
+                <div key={frag} className={`active ${relicPrefs[frag] === 1 && 'prefer'}`}>{frag}</div>
               ))}
             </div>
           ))
